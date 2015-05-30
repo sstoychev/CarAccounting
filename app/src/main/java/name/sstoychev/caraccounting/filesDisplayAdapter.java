@@ -11,17 +11,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.File;
+import java.util.List;
 
 
 /**
- * Created by Admin on 25.5.2015 ã..
+ * Created by Admin on 25.5.2015 ï¿½..
  */
 public class filesDisplayAdapter extends ArrayAdapter<String>{
 
     private Context context;
     private int resource;
     private String[] objects;
-    public filesDisplayAdapter(Context context, int resource, String[] objects) {
+
+    public filesDisplayAdapter(Context context, int resource, List<String> objects) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;

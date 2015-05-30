@@ -11,6 +11,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class CarAccounting extends ActionBarActivity {
@@ -24,18 +27,21 @@ public class CarAccounting extends ActionBarActivity {
         String[] files = getFullPathFiles(Environment.getRootDirectory());
         //ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,files);
         //ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,R.layout.fileslistviewlayout,R.id.filesTextView,files);
-
-        filesDisplayAdapter arrayAdapter=new filesDisplayAdapter( this, R.layout.fileslistviewlayout, files);
+        List<String> fileslist = Arrays.asList(files);
+        filesDisplayAdapter arrayAdapter = new filesDisplayAdapter(this, R.layout.fileslistviewlayout, fileslist);
         ListView lv = (ListView) findViewById(R.id.listView);
         lv.setAdapter(arrayAdapter);
     }
 
     public String[] getFullPathFiles(File dir){
-        String[] files = dir.list();
+        String[] filesfromdir = dir.list();
         String path = dir.getAbsolutePath();
-        for (int i = 0;  i < files.length; i++) {
-            files[i] = path+"/"+files[i];
+        List<String> allfiles = new ArrayList<String>();
+        allfiles.add("..");
+        for (int i = 0; i < filesfromdir.length; i++) {
+            allfiles.add(path + "/" + filesfromdir[i]);
         }
+        String[] files = allfiles.toArray(new String[allfiles.size()]);
         return files;
     }
 
