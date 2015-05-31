@@ -11,23 +11,25 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.File;
-import java.util.List;
+import java.util.ArrayList;
 
 
 /**
  * Created by Admin on 25.5.2015 �..
  */
-public class filesDisplayAdapter extends ArrayAdapter<String>{
+public class filesDisplayAdapter extends ArrayAdapter<File> {
 
+    public File currentDIr;
     private Context context;
     private int resource;
-    private String[] objects;
+    private ArrayList<File> objects;
 
-    public filesDisplayAdapter(Context context, int resource, List<String> objects) {
+    public filesDisplayAdapter(Context context, int resource, ArrayList<File> objects) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;
         this.objects = objects;
+        this.currentDIr = objects.get(0);
     }
 
     @Override
@@ -38,9 +40,13 @@ public class filesDisplayAdapter extends ArrayAdapter<String>{
         TextView filesTextView = (TextView) row.findViewById(R.id.filesTextView);
         ImageView  imageView = (ImageView) row.findViewById(R.id.imageView);
         CheckBox checkBox = (CheckBox) row.findViewById(R.id.checkBox);
+        File file = objects.get(position);
+        if (position == 0) {
+            filesTextView.setText("..");
+        } else {
+            filesTextView.setText(objects.get(position).getName());
+        }
 
-        filesTextView.setText((CharSequence) objects[position]);
-        File file = new File(objects[position]);
         if (file.isDirectory()) {
             //checkBox.setEnabled(false);
             checkBox.setVisibility(View.INVISIBLE);
