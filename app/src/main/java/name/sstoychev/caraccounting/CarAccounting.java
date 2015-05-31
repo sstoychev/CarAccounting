@@ -21,19 +21,12 @@ public class CarAccounting extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //String externalStorageState = Environment.getExternalStorageState();
+        String dataDir = Environment.getRootDirectory().getAbsolutePath();
+        Toast.makeText(this, dataDir, Toast.LENGTH_LONG).show();
         setContentView(R.layout.activity_car_accounting);
-        //String[] files = {"1", "2", "3"};
-        //String[] files = Environment.getRootDirectory().list();
-        //ArrayList<File> files = getFullPathFiles(Environment.getRootDirectory());
-        //ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,files);
-        //ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,R.layout.fileslistviewlayout,R.id.filesTextView,files);
-        //List<String> fileset = Arrays.asList(files);
-        //filesDisplayAdapter arrayAdapter = new filesDisplayAdapter(this, R.layout.fileslistviewlayout, files);
         ListView lv = (ListView) findViewById(R.id.listView);
-        //lv.setAdapter(arrayAdapter);
         showFiles(lv, 0);
-        //TextView textPath = (TextView) findViewById(R.id.textPath);
-        //textPath.setText(Environment.getRootDirectory().getAbsolutePath());
         lv.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
                     @Override
@@ -41,18 +34,6 @@ public class CarAccounting extends ActionBarActivity {
                                             View v,
                                             int position,
                                             long id) {
-                        /*
-                        filesDisplayAdapter arrayAdapter = (filesDisplayAdapter) lv.getAdapter();
-                        if (arrayAdapter.getItem(position).isDirectory()){
-                            File file = (position == 0  & arrayAdapter.getItem(position).getParentFile() != null ? arrayAdapter.getItem(position).getParentFile(): arrayAdapter.getItem(position));
-                            ArrayList<File> files = getFullPathFiles(file);
-                          arrayAdapter.clear();
-                            for (int i =0; i< files.size(); i++){
-                                arrayAdapter.add(files.get(i));
-                            }
-                            arrayAdapter.notifyDataSetChanged();
-                        }
-                        */
                         showFiles((ListView) lv, position);
                     }
                 });
@@ -78,8 +59,7 @@ public class CarAccounting extends ActionBarActivity {
             ArrayList<File> files = getFullPathFiles(Environment.getRootDirectory());
             filesDisplayAdapter newArrayAdapter = new filesDisplayAdapter(this, R.layout.fileslistviewlayout, files);
             lv.setAdapter(newArrayAdapter);
-            TextView textPath = (TextView) findViewById(R.id.textPath);
-            textPath.setText(Environment.getRootDirectory().getAbsolutePath());
+            setTexts(Environment.getRootDirectory());
         } else {
             if (arrayAdapter.getItem(position).isDirectory()) {
                 File file = (position == 0 & arrayAdapter.getItem(position).getParentFile() != null ? arrayAdapter.getItem(position).getParentFile() : arrayAdapter.getItem(position));
@@ -92,9 +72,19 @@ public class CarAccounting extends ActionBarActivity {
                     arrayAdapter.add(files.get(i));
                 }
                 arrayAdapter.notifyDataSetChanged();
-                TextView textPath = (TextView) findViewById(R.id.textPath);
-                textPath.setText(file.getAbsolutePath());
+                setTexts(file);
             }
+        }
+    }
+
+    public void setTexts(File dir) {
+        TextView textPath = (TextView) findViewById(R.id.textPath);
+        textPath.setText(dir.getAbsolutePath());
+        TextView fileText = (TextView) findViewById(R.id.textFile);
+        if (dir.canWrite()) {
+            fileText.setText("can Write");
+        } else {
+            fileText.setText("cannot write");
         }
     }
 
@@ -118,32 +108,5 @@ public class CarAccounting extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-    public void browseForFiles(View view) {
-        String path = Environment.getExternalStorageDirectory().toString();
-
-        ListView l =(ListView)findViewById(R.id.listView);
-        /////////
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            Toast.makeText(getApplicationContext(), "Media mounted",
-                    Toast.LENGTH_LONG).show();
-        } else if  (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
-            Toast.makeText(getApplicationContext(), "Media mounted read only",
-                    Toast.LENGTH_LONG).show();
-        } else  {
-            Toast.makeText(getApplicationContext(), "Media not mounted",
-                    Toast.LENGTH_LONG).show();
-        }
-        //////
-        File dir = Environment.getRootDirectory();
-        File files[] = dir.listFiles();
-        /*Log.d("Files", "Size: "+ file.length);
-        for (int i=0; i < file.length; i++)
-        {
-            Log.d("Files", "FileName:" + file[i].getName());
-        }
-        Toast.makeText(getApplicationContext(), files.toString(),
-                Toast.LENGTH_LONG).show();
-         */
     }
 }

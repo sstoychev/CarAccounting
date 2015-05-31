@@ -14,9 +14,6 @@ import java.io.File;
 import java.util.ArrayList;
 
 
-/**
- * Created by Admin on 25.5.2015 �..
- */
 public class filesDisplayAdapter extends ArrayAdapter<File> {
 
     public File currentDIr;
@@ -34,7 +31,6 @@ public class filesDisplayAdapter extends ArrayAdapter<File> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        //return super.getView(position, convertView, parent);
         LayoutInflater inflater  = ((Activity) context).getLayoutInflater();
         View row = inflater.inflate(resource, parent, false);
         TextView filesTextView = (TextView) row.findViewById(R.id.filesTextView);
@@ -48,7 +44,6 @@ public class filesDisplayAdapter extends ArrayAdapter<File> {
         }
 
         if (file.isDirectory()) {
-            //checkBox.setEnabled(false);
             checkBox.setVisibility(View.INVISIBLE);
             imageView.setImageResource(R.drawable.diricon);
         }
