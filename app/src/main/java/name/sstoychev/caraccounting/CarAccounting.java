@@ -14,6 +14,8 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 
 
 public class CarAccounting extends ActionBarActivity {
@@ -22,7 +24,7 @@ public class CarAccounting extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //String externalStorageState = Environment.getExternalStorageState();
-        String dataDir = Environment.getRootDirectory().getAbsolutePath();
+        String dataDir = Environment.getDataDirectory().getAbsolutePath();
         Toast.makeText(this, dataDir, Toast.LENGTH_LONG).show();
         setContentView(R.layout.activity_car_accounting);
         ListView lv = (ListView) findViewById(R.id.listView);
@@ -42,14 +44,19 @@ public class CarAccounting extends ActionBarActivity {
     public ArrayList<File> getFullPathFiles(File dir) {
         File[] filesFromDir = dir.listFiles();
         if (filesFromDir == null) {
-            return null;
+            ArrayList<File> allFiles = new ArrayList<>();
+            if (dir.getParentFile() != null) {
+                allFiles.add(0, dir);
+            }
+            return allFiles;
+        } else {
+            ArrayList<File> allFiles = new ArrayList<>(Arrays.asList(filesFromDir));
+            Collections.sort(allFiles, new FileNameComparator());
+            if (dir.getParentFile() != null) {
+                allFiles.add(0, dir);
+            }
+            return allFiles;
         }
-        ArrayList<File> allFiles = new ArrayList<>(Arrays.asList(filesFromDir));
-        if (dir.getParentFile() != null) {
-            allFiles.add(0, dir);
-        }
-
-        return allFiles;
     }
 
     public void showFiles(ListView lv, int position) {
@@ -108,5 +115,17 @@ public class CarAccounting extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private static class FileNameComparator implements Comparator<File> {
+        public int compare(File lhs, File rhs) {
+            if (lhs.isDirectory() & !rhs.isDirectory()) {
+                return -1;
+            } else if (!lhs.isDirectory() & rhs.isDirectory()) {
+                return 1;
+            } else {
+                return lhs.getName().compareTo(rhs.getName());
+            }
+        }
     }
 }
