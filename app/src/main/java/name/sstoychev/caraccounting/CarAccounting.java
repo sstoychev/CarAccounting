@@ -1,5 +1,6 @@
 package name.sstoychev.caraccounting;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -23,12 +25,14 @@ public class CarAccounting extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //String externalStorageState = Environment.getExternalStorageState();
-        String dataDir = Environment.getDataDirectory().getAbsolutePath();
-        Toast.makeText(this, dataDir, Toast.LENGTH_LONG).show();
+        //File dataDir = Environment.getDataDirectory();
+        //Toast.makeText(this, dataDir.getAbsolutePath(), Toast.LENGTH_LONG).show();
         setContentView(R.layout.activity_car_accounting);
         ListView lv = (ListView) findViewById(R.id.listView);
+        ExecuteAsRoot executeAsRoot = new ExecuteAsRoot();
+        Boolean rootAvailable = executeAsRoot.canRunRootCommands();
         showFiles(lv, 0);
+
         lv.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
                     @Override
@@ -124,7 +128,7 @@ public class CarAccounting extends ActionBarActivity {
             } else if (!lhs.isDirectory() & rhs.isDirectory()) {
                 return 1;
             } else {
-                return lhs.getName().compareTo(rhs.getName());
+                return lhs.getName().compareToIgnoreCase(rhs.getName());
             }
         }
     }

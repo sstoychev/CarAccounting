@@ -36,6 +36,9 @@ public class filesDisplayAdapter extends ArrayAdapter<File> {
         TextView filesTextView = (TextView) row.findViewById(R.id.filesTextView);
         ImageView  imageView = (ImageView) row.findViewById(R.id.imageView);
         CheckBox checkBox = (CheckBox) row.findViewById(R.id.checkBox);
+        CheckBox checkRead = (CheckBox) row.findViewById(R.id.checkRead);
+        CheckBox checkWrite = (CheckBox) row.findViewById(R.id.checkWrite);
+        CheckBox checkExecute = (CheckBox) row.findViewById(R.id.checkExecute);
         File file = objects.get(position);
         if (position == 0) {
             filesTextView.setText("..");
@@ -51,6 +54,9 @@ public class filesDisplayAdapter extends ArrayAdapter<File> {
             checkBox.setEnabled(true);
             imageView.setImageResource(R.drawable.fileicon);
         }
+        checkRead.setChecked(file.canRead());
+        checkWrite.setChecked(file.canWrite());
+        checkExecute.setChecked(file.canExecute());
         return row;
     }
 }
